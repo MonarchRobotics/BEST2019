@@ -24,33 +24,35 @@ task main()
 		// autonomous movement
 		if (vexRT[Btn8D] == 1)
 		{
-			if (getIrReading(irMiddle) == 0 && getIrReading(irLeft) == 0 && getIrReading(irRight) == 0)
+			while (true)
 			{
-				motor[leftMotor] = 100;
-				motor[rightMotor] = -100;
-			}
-			else if (getIrReading(irLeft) == 1)
-			{
-				while (getIrReading(irMiddle) == 1)
+				if (getIrReading(irMiddle) == 0 && getIrReading(irLeft) == 0 && getIrReading(irRight) == 0)
 				{
-					motor[leftMotor] = -50;
-					motor[rightMotor] = -50;
+					motor[leftMotor] = 100;
+					motor[rightMotor] = -100;
 				}
-			}
-			else if (getIrReading(irRight) == 1)
-			{
-				while (getIrReading(irMiddle) == 1)
+				else if (getIrReading(irLeft) == 1)
 				{
-					motor[leftMotor] = 50;
-					motor[rightMotor] = 50;
+					while (getIrReading(irMiddle) == 1)
+					{
+						motor[leftMotor] = -50;
+						motor[rightMotor] = -50;
+					}
 				}
-			}
-			else
-			{
-				motor[leftMotor] = 0;
-				motor[rightMotor] = 0;
+				else if (getIrReading(irRight) == 1)
+				{
+					while (getIrReading(irMiddle) == 1)
+					{
+						motor[leftMotor] = 50;
+						motor[rightMotor] = 50;
+					}
+				}
+				else
+				{
+					motor[leftMotor] = 0;
+					motor[rightMotor] = 0;
+				}
 			}
 		}
 	}
 }
-
