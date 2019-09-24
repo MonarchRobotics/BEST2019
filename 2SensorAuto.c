@@ -18,24 +18,27 @@ task main()
 	{
 		if (vexRT[Btn8D] == 1)
 		{
-			if (getIrReading(irLeft) == 1 && getIrReading(irRight) == 1)
+			while (true)
 			{
-				motor[motorLeft] = 100;
-				motor[motorRight] = -100;
-			}
-			else if (getIrReading(irLeft) == 0)
-			{
-				motor[motorLeft] = -50;
-				motor[motorRight] = -50;
-			}
-			else if (getIrReading(irRight) == 0)
-			{
-				motor[motorLeft] = 50;
-				motor[motorRight] = 50;
-			}
-			else {
-				motor[motorLeft] = 0;
-				motor[motorRight] = 0;
+				if (getIrReading(irLeft) == 1 && getIrReading(irRight) == 1)
+				{
+					motor[motorLeft] = 100;
+					motor[motorRight] = -100;
+				}
+				else if (getIrReading(irLeft) == 0)
+				{
+					motor[motorLeft] = -50;
+					motor[motorRight] = -50;
+				}
+				else if (getIrReading(irRight) == 0)
+				{
+					motor[motorLeft] = 50;
+					motor[motorRight] = 50;
+				}
+				else {
+					motor[motorLeft] = 0;
+					motor[motorRight] = 0;
+				}
 			}
 		}
 	}
