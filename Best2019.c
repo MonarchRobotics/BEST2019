@@ -20,16 +20,17 @@ task main()
 	{
 
 		//Rack and Pinion Code
-		while (vexRT[Btn5U] == 1)
+		if(vexRT[Btn5U] == 1)
+		{
+			motor[motorRP] = -50;
+		}
+		else if(vexRT[Btn5D] == 1)
 		{
 			motor[motorRP] = 25;
 		}
-
-		while (vexRT[Btn5D] == 1)
-		{
-			motor[motorRP] = -25;
+		else{
+			motor[motorRP] = 0;
 		}
-
 		//Servo Code
 		if(vexRT[Btn7U] == 1){
 			motor[servo] = -128;
@@ -108,16 +109,12 @@ task main()
 		{
 			autoActive = true;
 		}
-		else if (vexRT[Btn8D] == 1 && autoActive == true)
-		{
-			autoActive = false;
-		}
 
 		//autonomous - 2 sensors
 
 		int blackDetected = 1;
 		int whiteDetected = 0;
-		int forwardSpeed = 50;
+		int forwardSpeed = 35;
 		int turnSpeed = 30;
 
 
@@ -128,16 +125,49 @@ task main()
 				motor[motorLeft] = forwardSpeed;
 				motor[motorRight] = forwardSpeed;
 			}
-			else if (getIrReading(irLeft) == whiteDetected)
+			else if (getIrReading(irLeft) == whiteDetected && getIrReading(irRight) == blackDetected)
 			{
 				motor[motorLeft] = -1 * turnSpeed;
 				motor[motorRight] = turnSpeed;
 			}
-			else if (getIrReading(irRight) == whiteDetected)
+			else if (getIrReading(irRight) == whiteDetected && getIrReading(irLeft) == blackDetected)
 			{
 				motor[motorLeft] = turnSpeed;
 				motor[motorRight] = -1 * turnSpeed;
 			}
+
+			if (vexRT[Btn8U] == 1)
+			{
+				autoActive = false;
+			}
 		}
+
+		//autonomous - 1 sensor
+
+		/*bool direction = false;
+		bool hasSeenWhite = false;
+
+		while (autoActive)
+		{
+			if(direction){
+				motor[motorLeft] = 50;
+				motor[motorRight] = 20;
+			}
+			else{
+				motor[motorLeft] = 20;
+				motor[motorRight] = 50;
+			}
+
+			if(getIrReading(irSensor)==0){
+				hasSeenWhite = true;
+			}
+
+
+			if (getIrReading(irSensor) == 1) {
+				if(hasSeenWhite){
+					direction = !direction;
+					hasSeenWhite = false;
+				}
+			}*/
 	}
 }
