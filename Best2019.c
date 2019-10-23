@@ -172,8 +172,8 @@ task main()
 		int blackDetected = 1;
 		int whiteDetected = 0;
 		int limitPressed = 0;
-		int forwardSpeed = 70;
-		int turnSpeed = 90;
+		int forwardSpeed = 50;
+		int turnSpeed = 60;
 
 
 		/*if (vexRT[Btn8R] == 1)
