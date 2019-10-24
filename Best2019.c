@@ -33,7 +33,7 @@ task main()
 	motor[autoRelease] = 128;
 	while (true)
 	{
-	
+
 		//Rack and Pinion Code
 		if(vexRT[Btn5U] == 1)
 			motor[motorRP] = -100;//Up Speed
@@ -51,6 +51,7 @@ task main()
 			motor[servo] = servoPos;
 			clearTimer(timer1);
 		}
+		
 		//Automatically close hatch after too long
 		if(time1[timer1] >= servoAutoClose){
 			servoPos = 128;
@@ -61,12 +62,8 @@ task main()
 
 		if (vexRT[Btn8U] == 1)
 			gear = 1;
-		else if (vexRT[Btn8L] == 1)
-			gear = 0.75;
 		else if (vexRT[Btn8R] == 1)
 			gear = 0.50;
-		else if (vexRT[Btn8D] == 1)
-			gear = 0.25;
 
 		// Direction
 
@@ -91,70 +88,6 @@ task main()
 				motor[motorLeft] = -gear * vexRT[Ch2];
 			}
 		}
-		// Joystick to Motor Drive
-
-
-		//Joystick to Motor Parabolic Drive
-		/*if (vexRT[Ch3] > 0)
-		{
-		motor[motorLeft] = (vexRT[Ch3]) * (vexRT[Ch3]) * 100;
-		}
-		else if (vexRT[Ch3] < 0)
-		{
-		motor[motorLeft] = -1 * (vexRT[Ch3]) * (vexRT[Ch3]) * 100;
-		}
-
-		if (vexRT[Ch2] > 0)
-		{
-		motor[motorRight] = (vexRT[Ch2]) * (vexRT[Ch2]) * 100;
-		}
-		else if (vexRT[Ch2] < 0)
-		{
-		motor[motorRight] = -1 * (vexRT[Ch2]) * (vexRT[Ch2]) * 100;
-		}*/
-
-		// Drive with Channel 3 Forward and Backwards, Channel 1 Left and Right
-		/*float straightChannel = vexRT[Ch3];
-		float turningChannel = vexRT[Ch1];
-		float forwards = (straightChannel) * (straightChannel) * 100;
-		float backwards = -1 * (straightChannel) * (straightChannel) * 100;
-		float turning = (turningChannel) * (turningChannel) * 50;
-
-		if (straightChannel > 0 && turningChannel > 0)
-		{
-		motor[motorLeft] = 	forwards;
-		motor[motorRight] = turning;
-		}
-		else if (straightChannel > 0 && turningChannel < 0)
-		{
-		motor[motorLeft] = 	turning;
-		motor[motorRight] = forwards;
-		}
-		else if (straightChannel < 0 && turningChannel > 0)
-		{
-		motor[motorLeft] = 	backwards;
-		motor[motorRight] = turning;
-		}
-		else if (straightChannel < 0 && turningChannel < 0)
-		{
-		motor[motorLeft] = 	turning;
-		motor[motorRight] = backwards;
-		}
-		else if (straightChannel > 0)
-		{
-		motor[motorLeft] = forwards;
-		motor[motorRight] = forwards;
-		}
-		else if (straightChannel < 0)
-		{
-		motor[motorLeft] = 	backwards;
-		motor[motorRight] = backwards;
-		}
-		else
-		{
-		motor[motorLeft] = 0;
-		motor[motorRight] = 0;
-		}*/
 
 		//toggle autonomous
 
@@ -172,29 +105,9 @@ task main()
 		int blackDetected = 1;
 		int whiteDetected = 0;
 		int limitPressed = 0;
-		int forwardSpeed = 50;
+		int forwardSpeed = 35;
 		int turnSpeed = 60;
 
-
-		/*if (vexRT[Btn8R] == 1)
-		{
-		turnSpeed += 5;
-		}
-
-		if (vexRT[Btn8L] == 1)
-		{
-		turnSpeed -= 5;
-		}
-
-		if (vexRT[Btn7R] == 1)
-		{
-		forwardSpeed += 5;
-		}
-
-		if (vexRT[Btn7L] == 1)
-		{
-		forwardSpeed -= 5;
-		}*/
 
 		while (autoActive)
 		{
@@ -209,25 +122,25 @@ task main()
 				if (getIrReading(irLeft) == blackDetected && getIrReading(irRight) == blackDetected)
 				{
 					motor[motorLeft] = forwardSpeed;
-					motor[motorRight] = -forwardSpeed;
+					motor[motorRight] = -1.35 * forwardSpeed;
 				}
 				else if (getIrReading(irLeft) == whiteDetected && getIrReading(irRight) == blackDetected)
 				{
-					motor[motorLeft] = 0.75 * turnSpeed;
-					motor[motorRight] = turnSpeed;
+					motor[motorLeft] = 1 * turnSpeed;
+					motor[motorRight] = 0.75 * turnSpeed;
 				}
 				else if (getIrReading(irRight) == whiteDetected && getIrReading(irLeft) == blackDetected)
 				{
-					motor[motorLeft] = -1 * turnSpeed;
-					motor[motorRight] = -0.75 * turnSpeed;
+					motor[motorLeft] = -0.75 * turnSpeed;
+					motor[motorRight] = -1 * turnSpeed;
 				}
 				else
 				{
 					motor[motorLeft] = -forwardSpeed;
-					motor[motorRight] = forwardSpeed;
+					motor[motorRight] = 1.35 * forwardSpeed;
 				}
 			}
-			
+
 			if (vexRT[Btn7L] != prev7L)
 			{
 				if(vexRT[Btn7L] == 1){
@@ -237,33 +150,5 @@ task main()
 				prev7L = vexRT[Btn7L];
 			}
 		}
-
-		//autonomous - 1 sensor
-
-		/*bool direction = false;
-		bool hasSeenWhite = false;
-
-		while (autoActive)
-		{
-		if(direction){
-		motor[motorLeft] = 50;
-		motor[motorRight] = 20;
-		}
-		else{
-		motor[motorLeft] = 20;
-		motor[motorRight] = 50;
-		}
-
-		if(getIrReading(irSensor)==0){
-		hasSeenWhite = true;
-		}
-
-
-		if (getIrReading(irSensor) == 1) {
-		if(hasSeenWhite){
-		direction = !direction;
-		hasSeenWhite = false;
-		}
-		}*/
 	}
 }
