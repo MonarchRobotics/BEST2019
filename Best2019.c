@@ -13,6 +13,7 @@ float gear = 1;
 int direction = true;
 int prev6D = false;
 int prev7U = false;
+int prev6U = false;
 int prev7L = false;
 int servoPos = 128;
 int servoAutoClose = 2000; //Milliseconds
@@ -44,14 +45,15 @@ task main()
 
 
 		// Servo Code
-		if (vexRT[Btn7U] != prev7U){//Detect button change
+		if (vexRT[Btn7U] != prev7U || vexRT[Btn6U] != prev6U){//Detect button change
 			prev7U = vexRT[Btn7U];
-			if(vexRT[Btn7U] == 1)//Only run on rising edge (aka press, not release)
+			prev6U = vexRT[Btn6U];
+			if(vexRT[Btn7U] == 1 || vexRT[Btn6U] == 1)//Only run on rising edge (aka press, not release)
 				servoPos = (servoPos == 128) ? -50 : 128;
 			motor[servo] = servoPos;
 			clearTimer(timer1);
 		}
-		
+
 		//Automatically close hatch after too long
 		if(time1[timer1] >= servoAutoClose){
 			servoPos = 128;
@@ -75,8 +77,7 @@ task main()
 
 		// Drive
 		if(vexRT[Btn6U]==1){
-			motor[motorLeft] = -50;
-			motor[motorRight] = 50;
+
 		}
 		else{
 			if(direction == 1){
@@ -105,9 +106,10 @@ task main()
 		int blackDetected = 1;
 		int whiteDetected = 0;
 		int limitPressed = 0;
-		int forwardSpeed = 35;
+		int forwardSpeed = 45;
 		int turnSpeed = 60;
-
+		if(time1[timer2] >= 5000)
+				motor[autoRelease] = 128;
 
 		while (autoActive)
 		{
@@ -116,6 +118,8 @@ task main()
 				motor[motorLeft] = 0;
 				motor[motorRight] = 0;
 				motor[autoRelease] = -128;
+				autoActive = false;
+				clearTimer(timer2);
 			}
 			else
 			{
