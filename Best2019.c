@@ -87,7 +87,7 @@ task main()
 					motor[motorLeft] = -gear * 100 * (1 / (1 + pow(2.718, -((-vexRT[Ch3]/8) - 6))));
 				else
 					motor[motorLeft] = 0;
-				
+
 				if (vexRT[Ch2] > 0)
 					motor[motorRight] = -gear * 100 * (1 / (1 + pow(2.718, -((vexRT[Ch2]/8) - 6))));
 				else if (vexRT[Ch2] < 0)
@@ -102,7 +102,7 @@ task main()
 					motor[motorRight] = -gear * 100 * (1 / (1 + pow(2.718, -((-vexRT[Ch3]/8) - 6))));
 				else
 					motor[motorRight] = 0;
-				
+
 				if (vexRT[Ch2] > 0)
 					motor[motorLeft] = -gear * 100 * (1 / (1 + pow(2.718, -((vexRT[Ch2]/8) - 6))));
 				else if (vexRT[Ch2] < 0)
@@ -140,9 +140,18 @@ task main()
 			{
 				motor[motorLeft] = 0;
 				motor[motorRight] = 0;
-				motor[autoRelease] = -128;
-				autoActive = false;
+				
 				clearTimer(timer2);
+				clearTimer(timer3);
+				
+				while (SensorValue(limitSwitch) == limitPressed)
+				{
+					if (time1(timer3) >= 5000) {
+						motor[autoRelease] = -128;
+						autoActive = false;
+					}
+				}
+				
 			}
 			else
 			{
