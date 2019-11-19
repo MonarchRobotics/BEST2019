@@ -138,12 +138,15 @@ task main()
 		{
 			if (SensorValue(limitSwitch) == limitPressed)
 			{
+				// stop drive when limit switch detected
 				motor[motorLeft] = 0;
 				motor[motorRight] = 0;
 				
+				// start timers
 				clearTimer(timer2);
 				clearTimer(timer3);
 				
+				// if the timer has been going for longer than 5 sec, release the piece
 				while (SensorValue(limitSwitch) == limitPressed)
 				{
 					if (time1(timer3) >= 5000) {
@@ -155,28 +158,33 @@ task main()
 			}
 			else
 			{
+				// both detect black, go forward
 				if (getIrReading(irLeft) == blackDetected && getIrReading(irRight) == blackDetected)
 				{
 					motor[motorLeft] = forwardSpeed;
 					motor[motorRight] = -1.35 * forwardSpeed;
 				}
+				// white detected on left, turn left
 				else if (getIrReading(irLeft) == whiteDetected && getIrReading(irRight) == blackDetected)
 				{
 					motor[motorLeft] = 1 * turnSpeed;
 					motor[motorRight] = 0.75 * turnSpeed;
 				}
+				// white detected on right, turn right
 				else if (getIrReading(irRight) == whiteDetected && getIrReading(irLeft) == blackDetected)
 				{
 					motor[motorLeft] = -0.75 * turnSpeed;
 					motor[motorRight] = -1 * turnSpeed;
 				}
+				// both detect white, go backwards
 				else
 				{
 					motor[motorLeft] = -forwardSpeed;
 					motor[motorRight] = 1.35 * forwardSpeed;
 				}
 			}
-
+			
+			// turn off auto with 7L
 			if (vexRT[Btn7L] != prev7L)
 			{
 				if(vexRT[Btn7L] == 1){
