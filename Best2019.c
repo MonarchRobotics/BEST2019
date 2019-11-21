@@ -1,5 +1,5 @@
 #pragma config(Sensor, dgtl2,  irLeft,         sensorDigitalIn)
-#pragma config(Sensor, dgtl4,  irRight,        sensorDigitalIn)
+#pragma config(Sensor, dgtl3,  irRight,        sensorDigitalIn)
 #pragma config(Sensor, dgtl6,  limitSwitch,    sensorTouch)
 #pragma config(Motor,  port2,           motorLeft,     tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port3,           servo,         tmotorServoStandard, openLoop)
@@ -60,11 +60,11 @@ task main()
 		if (vexRT[Btn7D] == 1) {
 			if (prev7D) {
 				motor[sliderServo] = 128;
-				prev7D != prev7D;
+				prev7D = !prev7D;
 			}
 			else if (!prev7D) {
 				motor[sliderServo] = 0;
-				prev7D != prev7D;
+				prev7D = !prev7D;
 			}
 		}
 
