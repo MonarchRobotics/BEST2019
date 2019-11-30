@@ -137,8 +137,10 @@ task main()
 
 		if (vexRT[Btn7L] != prev7L)
 		{
-			if(vexRT[Btn7L] == 1)
+			if(vexRT[Btn7L] == 1) {
 				autoActive = true;
+				clearTimer(timer3);
+			}
 			prev7L = vexRT[Btn7L];
 		}
 
@@ -154,7 +156,6 @@ task main()
 
 		while (autoActive)
 		{
-			clearTimer(timer3);
 
 			if (time1(timer3) >= 10000 && SensorValue(limitSwitch) == limitPressed) {
 				// stop drive when limit switch detected
