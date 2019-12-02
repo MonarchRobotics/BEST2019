@@ -157,7 +157,7 @@ task main()
 		while (autoActive)
 		{
 
-			if (time1(timer3) >= 10000 && SensorValue(limitSwitch) == limitPressed) {
+			if (time1[timer3] >= 10000 && SensorValue(limitSwitch) == limitPressed) {
 				// stop drive when limit switch detected
 				motor[motorLeft] = 0;
 				motor[motorRight] = 0;
