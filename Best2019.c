@@ -94,8 +94,13 @@ task main()
 		}
 
 		// Drive
-		if(vexRT[Btn6U]==1){
-
+		if(vexRT[Btn7R]==1){
+			motor[motorLeft] = -40;
+			motor[motorRight] = 40;
+		}
+		else if (vexRT[Btn7D] == 1) {
+			motor[motorRight] = -40;
+			motor[motorLeft] = 40;
 		}
 		else{
 			if(direction == 1){
@@ -157,7 +162,7 @@ task main()
 		while (autoActive)
 		{
 
-			if (time1[timer3] >= 10000 && SensorValue(limitSwitch) == limitPressed) {
+			if ((time1[timer3] >= 10000 && SensorValue(limitSwitch) == limitPressed) || time1[timer3] >= 30000) {
 				// stop drive when limit switch detected
 				motor[motorLeft] = 0;
 				motor[motorRight] = 0;
