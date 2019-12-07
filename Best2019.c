@@ -18,6 +18,7 @@ int prev7U = false;
 int prev7D = false;
 int prev6U = false;
 int prev7L = false;
+int prev8R = false;
 int servoPos = 128;
 int servoAutoClose = 2000; //Milliseconds
 
@@ -80,10 +81,11 @@ task main()
 
 		// GearBox
 
-		if (vexRT[Btn8U] == 1)
-			gear = 1;
-		else if (vexRT[Btn8R] == 1)
-			gear = 0.50;
+		if (vexRT[Btn8R] != prev8R){
+			prev8R = vexRT[Btn8R];
+			if(vexRT[Btn8R] == 1)
+				gear = (gear == 1) ? 0.5 : 1;
+		}
 
 		// Direction
 
@@ -167,7 +169,7 @@ task main()
 		int blackDetected = 1;
 		int whiteDetected = 0;
 		int limitPressed = 0;
-		int forwardSpeed = 60;
+		int forwardSpeed = 50;
 		int turnSpeed = 40;
 		if(time1[timer2] >= 5000)
 				motor[autoRelease] = 128;
@@ -175,13 +177,13 @@ task main()
 		while (autoActive)
 		{
 
-			if ((time1[timer3] >= 12000 && SensorValue(limitSwitch) == limitPressed) || time1[timer3] >= 30000) {
+			if ((time1[timer3] >= 7000 && SensorValue(limitSwitch) == limitPressed) || time1[timer3] >= 17000) {
 				// stop drive when limit switch detected
 				motor[motorLeft] = 0;
 				motor[motorRight] = 0;
 
 				// drop piece and end auto
-				motor[autoRelease] = -128;
+				motor[autoRelease] = 0;
 				autoActive = false;
 
 				// start timers
@@ -220,8 +222,8 @@ task main()
 				// both detect white, go backwards
 				else
 				{
-					motor[motorLeft] = -forwardSpeed;
-					motor[motorRight] = forwardSpeed;
+					motor[motorLeft] = -forwardSpeed*0.75;
+					motor[motorRight] = forwardSpeed*0.75;
 				}
 			}
 
