@@ -13,7 +13,7 @@
 //Global Variables
 float gear = 1;
 int direction = true;
-int prev6D = false;
+int prev7R = false;
 int prev7U = false;
 int prev7D = false;
 int prev6U = false;
@@ -67,7 +67,7 @@ task main()
 		}
 
 		// Slider Servo Code
-		if (vexRT[Btn7D] == 1) {
+		if (2 == 1) {
 			if (prev7D) {
 				motor[sliderServo] = 128;
 				prev7D = !prev7D;
@@ -87,31 +87,38 @@ task main()
 
 		// Direction
 
-		if (vexRT[Btn6D] != prev6D){
-			prev6D = vexRT[Btn6D];
-			if(vexRT[Btn6D] == 1)
+		if (vexRT[Btn7R] != prev7R){
+			prev7R = vexRT[Btn7R];
+			if(vexRT[Btn7R] == 1)
+				direction = (direction == 1) ? -1 : 1;
+		}
+		if (vexRT[Btn7D] != prev7D){
+			prev7D = vexRT[Btn7D];
+			if(vexRT[Btn7D] == 1)
 				direction = (direction == 1) ? -1 : 1;
 		}
 
 		// Drive
-		if(vexRT[Btn7R]==1){
-			motor[motorLeft] = -40;
-			motor[motorRight] = 40;
-		}
-		else if (vexRT[Btn7D] == 1) {
-			motor[motorRight] = -40;
-			motor[motorLeft] = 40;
+		if(2==1){
+			motor[motorLeft] = -15;
+			motor[motorRight] = 15;
 		}
 		else{
 			if(direction == 1){
-				if (vexRT[Ch3] > 0)
+		    if(vexRT[Ch3]<20 && vexRT[Ch3]>-20 && vexRT[Btn6D]==1){
+		    	motor[motorLeft] = -20;
+		    }
+				else if (vexRT[Ch3] > 0)
 					motor[motorLeft] = gear * 100 * (1 / (1 + pow(2.718, -((vexRT[Ch3]/8) - 6))));
 				else if (vexRT[Ch3] < 0)
 					motor[motorLeft] = -gear * 100 * (1 / (1 + pow(2.718, -((-vexRT[Ch3]/8) - 6))));
 				else
 					motor[motorLeft] = 0;
 
-				if (vexRT[Ch2] > 0)
+			  if(vexRT[Ch2]<20 && vexRT[Ch2]>-20 && vexRT[Btn6D]==1){
+		    	motor[motorRight] = 20;
+		    }
+				else if (vexRT[Ch2] > 0)
 					motor[motorRight] = -gear * 100 * (1 / (1 + pow(2.718, -((vexRT[Ch2]/8) - 6))));
 				else if (vexRT[Ch2] < 0)
 					motor[motorRight] = gear * 100 * (1 / (1 + pow(2.718, -((-vexRT[Ch2]/8) - 6))));
@@ -119,14 +126,20 @@ task main()
 					motor[motorRight] = 0;
 			}
 			else{
-				if (vexRT[Ch3] > 0)
+				if(vexRT[Ch3]<20 && vexRT[Ch3]>-20 && vexRT[Btn6D]==1){
+		    	motor[motorRight] = 20;
+		    }
+				else if (vexRT[Ch3] > 0)
 					motor[motorRight] = gear * 100 * (1 / (1 + pow(2.718, -((vexRT[Ch3]/8) - 6))));
 				else if (vexRT[Ch3] < 0)
 					motor[motorRight] = -gear * 100 * (1 / (1 + pow(2.718, -((-vexRT[Ch3]/8) - 6))));
 				else
 					motor[motorRight] = 0;
 
-				if (vexRT[Ch2] > 0)
+				if(vexRT[Ch2]<20 && vexRT[Ch2]>-20 && vexRT[Btn6D]==1){
+		    	motor[motorLeft] = -20;
+		    }
+				else if (vexRT[Ch2] > 0)
 					motor[motorLeft] = -gear * 100 * (1 / (1 + pow(2.718, -((vexRT[Ch2]/8) - 6))));
 				else if (vexRT[Ch2] < 0)
 					motor[motorLeft] = gear * 100 * (1 / (1 + pow(2.718, -((-vexRT[Ch2]/8) - 6))));
@@ -154,15 +167,15 @@ task main()
 		int blackDetected = 1;
 		int whiteDetected = 0;
 		int limitPressed = 0;
-		int forwardSpeed = 40;
-		int turnSpeed = 60;
+		int forwardSpeed = 60;
+		int turnSpeed = 40;
 		if(time1[timer2] >= 5000)
 				motor[autoRelease] = 128;
 
 		while (autoActive)
 		{
 
-			if ((time1[timer3] >= 10000 && SensorValue(limitSwitch) == limitPressed) || time1[timer3] >= 30000) {
+			if ((time1[timer3] >= 12000 && SensorValue(limitSwitch) == limitPressed) || time1[timer3] >= 30000) {
 				// stop drive when limit switch detected
 				motor[motorLeft] = 0;
 				motor[motorRight] = 0;
@@ -190,25 +203,25 @@ task main()
 				if (getIrReading(irLeft) == blackDetected && getIrReading(irRight) == blackDetected)
 				{
 					motor[motorLeft] = forwardSpeed;
-					motor[motorRight] = -1.35 * forwardSpeed;
+					motor[motorRight] = -forwardSpeed;
 				}
 				// white detected on left, turn left
 				else if (getIrReading(irLeft) == whiteDetected && getIrReading(irRight) == blackDetected)
 				{
 					motor[motorLeft] = 1 * turnSpeed;
-					motor[motorRight] = 0.75 * turnSpeed;
+					motor[motorRight] = 0.7 * turnSpeed;
 				}
 				// white detected on right, turn right
 				else if (getIrReading(irRight) == whiteDetected && getIrReading(irLeft) == blackDetected)
 				{
-					motor[motorLeft] = -0.75 * turnSpeed;
+					motor[motorLeft] = -0.7 * turnSpeed;
 					motor[motorRight] = -1 * turnSpeed;
 				}
 				// both detect white, go backwards
 				else
 				{
 					motor[motorLeft] = -forwardSpeed;
-					motor[motorRight] = 1.35 * forwardSpeed;
+					motor[motorRight] = forwardSpeed;
 				}
 			}
 
